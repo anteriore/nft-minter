@@ -18,6 +18,9 @@ const config = {
 
   // If you're running the local IPFS gateway on a non-default port, or if you want to use a public gatway when displaying IPFS gateway urls, edit this.
   ipfsGatewayUrl: "http://localhost:8080/ipfs",
+
+  alchemyKey: "$$ALCHEMY_KEY",
+  goerliPrivateKey: "$$GOERLI_PRIVATE_KEY",
 }
 
 module.exports = config

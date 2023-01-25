@@ -1,7 +1,5 @@
 import hardhat, { ethers } from "hardhat"
-
-const config = require("getconfig")
-const fs = require("fs/promises")
+import { saveDeploymentInfo, deploymentInfo } from "../src/deployment"
 
 const NFT_CONTRACT_NAME = "NftContract"
 const NFT_NAME = "Nft Test"
@@ -36,31 +34,7 @@ async function main() {
   console.log(`deployed  ${NFT_CONTRACT_NAME} for token ${NFT_NAME} (${NFT_SYMBOL}) to ${nftContract.address} (network: ${network})`)
   /** DEPLOY ERC721 */
 
-  saveDeploymentInfo(deploymentInfo(hardhat, nftContract))
-}
-
-function deploymentInfo(hardhat: any, nftContract: any) {
-  return {
-    network: hardhat.network.name,
-    contract: {
-      name: NFT_CONTRACT_NAME,
-      address: nftContract.address,
-      signerAddress: nftContract.signer.address,
-      abi: nftContract.interface.format(),
-    },
-  }
-}
-
-async function saveDeploymentInfo(info: object, filename = undefined) {
-  if (!filename) {
-    filename = config.deploymentConfigFile || "nft-deployment.json"
-  }
-
-  console.log(`Writing deployment info to ${filename}`)
-  const content = JSON.stringify(info, null, 2)
-  await fs.writeFile(filename, content, { encoding: "utf-8" })
-
-  return true
+  saveDeploymentInfo(deploymentInfo(hardhat, nftContract, NFT_CONTRACT_NAME))
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -1,6 +1,11 @@
-dist
 node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
 
-# local env files
-.env*
-!.env.example
+# Hardhat files
+cache
+artifacts
+

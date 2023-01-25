@@ -1,19 +1,18 @@
-# node-express-pg-graphql-template
+# Sample Hardhat Project
 
-## Getting Started
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
-First, run the development server:
+Try running some of the following tasks:
 
-```bash
-npm run watch
-# or
-yarn watch
+```shell
+npx hardhat help
+npx hardhat test
+REPORT_GAS=true npx hardhat test
+npx hardhat node
+npx hardhat run scripts/deploy.ts
 ```
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Local Setup:
 
-Open [http://localhost:8000/graphql](http://localhost:8000/graphql) with your browser.
+1. Install remixd globally or within the project: https://www.npmjs.com/package/@remix-project/remixd
+2. Run `remixd -s ./shared_project -u https://remix.ethereum.org` to share the project folder to remixd

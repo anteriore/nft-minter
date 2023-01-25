@@ -2,7 +2,7 @@ import hardhat from "hardhat"
 import { create } from "ipfs-http-client"
 import { loadDeploymentInfo } from "../src/deployment"
 import { pinTokenData } from "../src/ipfs"
-import { stripIpfsUriPrefix, makeGatewayURL, ensureIpfsUriPrefix } from "../src/uri-helpers"
+import { makeGatewayURL, ensureIpfsUriPrefix } from "../src/uri-helpers"
 
 const config = require("getconfig")
 const fs = require("fs/promises")
@@ -15,11 +15,20 @@ const ipfsAddOptions: any = {
 }
 
 async function main() {
-  const nft = await createNFTFromAssetFile("C:\\Users\\vince\\Pictures\\1.png", {})
-  console.log(nft)
+  const deployInfo = await loadDeploymentInfo()
 
-  const ipfsData = await pinTokenData(nft.tokenId)
-  console.log(ipfsData)
+  // connect to the smart contract using the address and ABI from the deploy info
+  const { abi, address } = deployInfo.contract
+  const contract: any = await hardhat.ethers.getContractAt(abi, address)
+
+  const tokenId = await contract.nextTokenId()
+
+  const nft = await createNFTFromAssetFile("C:\\Users\\vince\\Pictures\\1.png", {
+    name: `NFT ${tokenId}`,
+    tokenId: tokenId.toNumber(),
+  })
+
+  console.log(nft)
 }
 
 //////////////////////////////////////////////
@@ -68,8 +77,8 @@ async function createNFTFromAssetData(content: any, options: any) {
   const metadata = await makeNFTMetadata(assetURI, options)
 
   // add the metadata to IPFS
-  const { cid: metadataCid } = await ipfs.add({ path: "/nft/metadata.json", content: JSON.stringify(metadata) }, ipfsAddOptions)
-  const metadataURI = ensureIpfsUriPrefix(metadataCid) + "/metadata.json"
+  const { cid: metadataCid } = await ipfs.add({ path: `/nft/${options.tokenId}.json`, content: JSON.stringify(metadata) }, ipfsAddOptions)
+  const metadataURI = ensureIpfsUriPrefix(metadataCid) + `/${options.tokenId}.json`
 
   // get the address of the token owner from options, or use the default signing address if no owner is given
   let ownerAddress = options.owner
@@ -105,16 +114,16 @@ async function defaultOwnerAddress() {
  * @param {string} assetCid - IPFS URI for the NFT asset
  * @param {object} options
  * @param {?string} name - optional name to set in NFT metadata
- * @param {?string} description - optional description to store in NFT metadata
+ * @param {?string} attributes - optional attributes to store in NFT metadata
  * @returns {object} - NFT metadata object
  */
 async function makeNFTMetadata(assetURI: any, options: any) {
-  const { name, description } = options
+  const { name, attributes } = options
   assetURI = ensureIpfsUriPrefix(assetURI)
 
   return {
     name,
-    description,
+    attributes,
     image: assetURI,
   }
 }
@@ -125,7 +134,7 @@ async function makeNFTMetadata(assetURI: any, options: any) {
  * @param {string} filename - the path to an image file or other asset to use
  * @param {object} options
  * @param {?string} name - optional name to set in NFT metadata
- * @param {?string} description - optional description to store in NFT metadata
+ * @param {?string} attributes - optional attributes to store in NFT metadata
  * @param {?string} owner - optional ethereum address that should own the new NFT.
  * If missing, the default signing address will be used.
  *

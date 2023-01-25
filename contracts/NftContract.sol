@@ -56,4 +56,8 @@ contract NftContract is ERC721URIStorage {
 
         _safeMint(to, id);
     }
+
+    function nextTokenId() public view returns (uint256) {
+        return _tokenIds.current() + 1;
+    }
 }

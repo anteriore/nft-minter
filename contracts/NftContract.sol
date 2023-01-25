@@ -27,7 +27,7 @@ contract NftContract is ERC721URIStorage, Ownable {
         return bytes32(uint256(uint160(addr)));
     }
 
-    function mint(address owner, string memory metadataURI) public returns (uint256) {
+    function mint(address owner, string memory metadataURI) public onlyOwner returns (uint256) {
         _tokenIds.increment();
 
         uint256 id = _tokenIds.current();

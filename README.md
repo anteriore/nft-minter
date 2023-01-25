@@ -12,11 +12,14 @@ npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
 
-Local Setup:
+## Compile w/ Remix (Optional):
 
 1. Install remixd globally or within the project: https://www.npmjs.com/package/@remix-project/remixd
 2. Run `remixd -s ./shared_project -u https://remix.ethereum.org` to share the project folder to remixd
-3. Compile smart contracts: `npx hardhat compile` (This will compile all .sol files under /contracts folder)
-4. Run hardhat node locally: `npx hardhat node`
-5. Run deployment script: `npx hardhat run scripts/testDeploy.ts --network localhost` (This will deploy the contracts on your local node)
-6. Run mint script: `npx hardhat run scripts/mint.ts --network localhost` (This will run the mint script on your local node)
+
+## Local Setup:
+
+1. Compile smart contracts: `npx hardhat compile` (This will compile all .sol files under /contracts folder)
+2. Run hardhat node locally: `npx hardhat node`
+3. Run deployment script: `npx hardhat run scripts/testDeploy.ts --network localhost` (This will deploy the contracts on your local node)
+4. Run mint script: `npx hardhat run scripts/mint.ts --network localhost` (This will run the mint script on your local node)

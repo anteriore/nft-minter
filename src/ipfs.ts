@@ -1,9 +1,9 @@
 import { create } from "ipfs-http-client"
-import { getNFTMetadata } from "./nft-retrieval"
+import { getNFTMetadata } from "./nftRetrieval"
 import { concat } from "uint8arrays/concat"
 import { toString } from "uint8arrays/to-string"
 
-import { extractCID, stripIpfsUriPrefix } from "./uri-helpers"
+import { extractCID, stripIpfsUriPrefix } from "./uriHelpers"
 
 const all = require("it-all")
 const config = require("getconfig")

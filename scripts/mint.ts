@@ -2,7 +2,7 @@ import hardhat from "hardhat"
 import { create } from "ipfs-http-client"
 import { loadDeploymentInfo } from "../src/deployment"
 import { pinTokenData } from "../src/ipfs"
-import { makeGatewayURL, ensureIpfsUriPrefix } from "../src/uri-helpers"
+import { makeGatewayURL, ensureIpfsUriPrefix } from "../src/uriHelpers"
 
 const config = require("getconfig")
 const fs = require("fs/promises")
@@ -15,20 +15,29 @@ const ipfsAddOptions: any = {
 }
 
 async function main() {
-  const deployInfo = await loadDeploymentInfo()
+  //   const deployInfo = await loadDeploymentInfo()
 
   // connect to the smart contract using the address and ABI from the deploy info
-  const { abi, address } = deployInfo.contract
-  const contract: any = await hardhat.ethers.getContractAt(abi, address)
+  //   const { abi, address } = deployInfo.contract
+  //   const contract: any = await hardhat.ethers.getContractAt(abi, address)
 
-  const tokenId = await contract.nextTokenId()
+  const max = 200
 
-  const nft = await createNFTFromAssetFile("C:\\Users\\vince\\Pictures\\1.png", {
-    name: `NFT ${tokenId}`,
-    tokenId: tokenId.toNumber(),
-  })
+  for (let i = 1; i <= max; i++) {
+    console.log(`Iteration is #${i}`)
 
-  console.log(nft)
+    const ownerAddress = await defaultOwnerAddress()
+
+    console.log(String(i).padStart(6, "0"))
+
+    // mint a new token referencing the metadata URI
+    const tokenId = await mintToken(
+      ownerAddress,
+      `https://bafybeihwhpayaous26zuu6nx5pd4c6itcpwbuwul5qvbgnlcq22up5mwge.ipfs.nftstorage.link/${String(i).padStart(6, "0")}.json`
+    )
+
+    console.log(`Minted tokenId: ${tokenId}`)
+  }
 }
 
 //////////////////////////////////////////////
@@ -102,14 +111,6 @@ async function createNFTFromAssetData(content: any, options: any) {
 }
 
 /**
- * @returns {Promise<string>} - the default signing address that should own new tokens, if no owner was specified.
- */
-async function defaultOwnerAddress() {
-  const signers = await hardhat.ethers.getSigners()
-  return signers[0].address
-}
-
-/**
  * Helper to construct metadata JSON for
  * @param {string} assetCid - IPFS URI for the NFT asset
  * @param {object} options
@@ -126,6 +127,14 @@ async function makeNFTMetadata(assetURI: any, options: any) {
     attributes,
     image: assetURI,
   }
+}
+
+/**
+ * @returns {Promise<string>} - the default signing address that should own new tokens, if no owner was specified.
+ */
+async function defaultOwnerAddress() {
+  const signers = await hardhat.ethers.getSigners()
+  return signers[0].address
 }
 
 /**

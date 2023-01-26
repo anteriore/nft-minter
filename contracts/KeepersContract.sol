@@ -16,12 +16,14 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     uint256 public maxTokensOwned = 10;
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;
+    address private paymentRecepient;
 
     using Counters for Counters.Counter;
     Counters.Counter private _lastTokenIdBought;
 
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
+        paymentRecepient = msg.sender;
     }
     
     function _startTokenId() internal override pure returns (uint256) {
@@ -46,12 +48,9 @@ contract KeepersContract is ERC721AQueryable, Ownable {
             "Insufficient fees"
         );
         require(quantity > 0 && quantity <= maxMintQuantity, "Invalid quantity");
-        console.log("balance");
-        console.log(balanceOf(to));
         require(balanceOf(to) + quantity <= maxTokensOwned, "Invalid quantity");
 
-        // Transfer usdc tokens from sender to this contract
-        _token.transferFrom(msg.sender, address(this), usdcFee * quantity);
+        _token.transferFrom(msg.sender, paymentRecepient, usdcFee * quantity);
 
         _mint(to, quantity);
     }
@@ -74,6 +73,10 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     function setMaxSupply(uint256 _maxSupply) external onlyOwner {
         maxSupply = _maxSupply;
+    }
+
+    function setPaymentRecepient(address _paymentRecepient) external onlyOwner {
+        paymentRecepient = _paymentRecepient;
     }
 
     function setUsdcTokenAddress(address _usdcTokenAddress) external onlyOwner {

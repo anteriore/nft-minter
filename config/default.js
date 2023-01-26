@@ -20,7 +20,9 @@ const config = {
   ipfsGatewayUrl: "http://localhost:8080/ipfs",
 
   alchemyKey: "$$ALCHEMY_KEY",
+  infuraKey: "$$INFURA_KEY",
   goerliPrivateKey: "$$GOERLI_PRIVATE_KEY",
+  mainnetPrivateKey: "$$MAINNET_PRIVATE_KEY",
 }
 
 module.exports = config

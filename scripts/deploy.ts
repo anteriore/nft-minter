@@ -6,8 +6,8 @@ const NFT_NAME = "Founders Keepers Genesis Collection"
 const NFT_SYMBOL = "KEYS"
 
 const TOKEN_CONTRACT_NAME = "TokenContract"
-const TOKEN_NAME = "Token Test"
-const TOKEN_SYMBOL = "TT"
+const TOKEN_NAME = "USD//C"
+const TOKEN_SYMBOL = "USDC"
 
 async function main() {
   const network = hardhat.network.name

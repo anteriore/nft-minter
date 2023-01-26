@@ -26,7 +26,7 @@ const tree = new MerkleTree(leaves, keccak256, { sort: true })
 const merkleRoot = tree.getHexRoot()
 
 // 6. Calculating merkleProof to check if an address is whitelisted
-const merkleProof = tree.getHexProof(padBuffer("0xadDcb6D33B6f1b01285f5e98c0837E271A62A895"))
+const merkleProof = tree.getHexProof(padBuffer("0x70997970C51812dc3A010C7d01b50e0d17dc79C8"))
 
 console.log(merkleRoot)
 console.log(merkleProof)

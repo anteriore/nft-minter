@@ -68,6 +68,14 @@ contract KeepersContract is ERC721AQueryable, Ownable {
         maxMintQuantity = _maxMintQuantity;
     }
 
+    function setMaxTokensOwned(uint256 _maxTokensOwned) external onlyOwner {
+        maxTokensOwned = _maxTokensOwned;
+    }
+
+    function setMaxSupply(uint256 _maxSupply) external onlyOwner {
+        maxSupply = _maxSupply;
+    }
+
     function setUsdcTokenAddress(address _usdcTokenAddress) external onlyOwner {
         usdcTokenAddress = _usdcTokenAddress;
     }

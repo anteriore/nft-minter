@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract KeepersContract is ERC721AQueryable, Ownable {
     bytes32 public merkleRoot;
-    uint256 public usdcFee = 940;
+    uint256 public usdcFee = 940 ether;
     uint256 public maxMintQuantity = 5;
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;

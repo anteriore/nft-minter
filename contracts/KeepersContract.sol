@@ -13,7 +13,6 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     bytes32 public merkleRoot;
     uint256 public usdcFee = 940;
     uint256 public maxMintQuantity = 5;
-    uint256 public maxTokensOwned = 10;
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;
     address private paymentRecepient;
@@ -48,12 +47,12 @@ contract KeepersContract is ERC721AQueryable, Ownable {
             "Insufficient fees"
         );
         require(quantity > 0 && quantity <= maxMintQuantity, "Invalid quantity");
-        require(balanceOf(to) + quantity <= maxTokensOwned, "Invalid quantity");
 
         _token.transferFrom(msg.sender, paymentRecepient, usdcFee * quantity);
 
         _mint(to, quantity);
     }
+
 
     function setMerkleRoot(bytes32 _merkleRoot) external onlyOwner {
         merkleRoot = _merkleRoot;
@@ -65,10 +64,6 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     function setMaxMintQuantity(uint256 _maxMintQuantity) external onlyOwner {
         maxMintQuantity = _maxMintQuantity;
-    }
-
-    function setMaxTokensOwned(uint256 _maxTokensOwned) external onlyOwner {
-        maxTokensOwned = _maxTokensOwned;
     }
 
     function setMaxSupply(uint256 _maxSupply) external onlyOwner {

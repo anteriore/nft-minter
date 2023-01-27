@@ -16,6 +16,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;
     address private paymentRecepient;
+    string private baseUri;
 
     using Counters for Counters.Counter;
     Counters.Counter private _lastTokenIdBought;
@@ -23,14 +24,15 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
         paymentRecepient = msg.sender;
+        baseUri = 'https://bafybeibaultu6wpwrq7jj2w2qh7hbi2evj2cyff4ao3co4z5eq6o5vk35e.ipfs.nftstorage.link/';
     }
     
     function _startTokenId() internal override pure returns (uint256) {
         return 1;
     }
 
-    function _baseURI() internal override pure returns (string memory) {
-        return 'https://bafybeibaultu6wpwrq7jj2w2qh7hbi2evj2cyff4ao3co4z5eq6o5vk35e.ipfs.nftstorage.link/';
+    function _baseURI() internal override view returns (string memory) {
+        return baseUri;
     }
 
     function toBytes32(address addr) pure internal returns (bytes32) {
@@ -76,5 +78,9 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     function setUsdcTokenAddress(address _usdcTokenAddress) external onlyOwner {
         usdcTokenAddress = _usdcTokenAddress;
+    }
+
+    function setBaseUri(string memory newBaseUri) external onlyOwner {
+        baseUri = newBaseUri;
     }
 }

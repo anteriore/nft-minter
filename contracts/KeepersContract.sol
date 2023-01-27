@@ -30,7 +30,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     }
 
     function _baseURI() internal override pure returns (string memory) {
-        return 'https://bafybeihwhpayaous26zuu6nx5pd4c6itcpwbuwul5qvbgnlcq22up5mwge.ipfs.nftstorage.link/';
+        return 'https://bafybeibaultu6wpwrq7jj2w2qh7hbi2evj2cyff4ao3co4z5eq6o5vk35e.ipfs.nftstorage.link/';
     }
 
     function toBytes32(address addr) pure internal returns (bytes32) {

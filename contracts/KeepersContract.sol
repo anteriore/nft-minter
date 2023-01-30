@@ -17,6 +17,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     address public usdcTokenAddress;
     address public paymentRecepient;
     string private baseUri;
+    bool private isPublic = false;
 
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
@@ -39,7 +40,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     function mint(address to, uint256 quantity, bytes32[] calldata merkleProof) external {
         IERC20 _token = IERC20(usdcTokenAddress);
 
-        require(MerkleProof.verify(merkleProof, merkleRoot, toBytes32(msg.sender)) == true, "Invalid merkle proof");
+        require(MerkleProof.verify(merkleProof, merkleRoot, toBytes32(msg.sender)) == true || isPublic, "Invalid merkle proof");
         require(totalSupply() + quantity <= maxSupply, "Insufficient tokens to mint");
         require(
             _token.balanceOf(msg.sender) >= usdcFee,
@@ -84,5 +85,9 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     function setBaseUri(string memory newBaseUri) external onlyOwner {
         baseUri = newBaseUri;
+    }
+
+    function setIsPublic(bool _isPublic) external onlyOwner {
+        isPublic = _isPublic;
     }
 }

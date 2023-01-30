@@ -18,9 +18,6 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     address private paymentRecepient;
     string private baseUri;
 
-    using Counters for Counters.Counter;
-    Counters.Counter private _lastTokenIdBought;
-
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
         paymentRecepient = msg.sender;

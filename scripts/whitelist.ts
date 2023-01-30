@@ -136,8 +136,8 @@ const whitelisted = [
   "0xbf366ac0f44da27e9bce103329858e8758e09ab4",
   "0x4e12494144dbd9456a93ce147fcd1207252a5655",
   "0x68cb2cada45d214a9b06e253d10635cab264677f",
-  "0xdadd973ac98e362084b9ddce297bc39f72756cee",
   "0xadDcb6D33B6f1b01285f5e98c0837E271A62A895",
+  "0xB9B38F62f90c7ef154871D0d5c393a1fA835dC3B",
 ]
 // 3. Creating a buffer since we bytes array
 const padBuffer = (addr: any) => {

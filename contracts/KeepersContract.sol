@@ -11,16 +11,16 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract KeepersContract is ERC721AQueryable, Ownable {
     bytes32 public merkleRoot;
-    uint256 public usdcFee = 940 ether;
+    uint256 public usdcFee = 920 ether;
     uint256 public maxMintQuantity = 5;
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;
-    address private paymentRecepient;
+    address public paymentRecepient;
     string private baseUri;
 
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
-        paymentRecepient = msg.sender;
+        paymentRecepient = address(0xaB1d84559E9D9eBcf6De4FA93E0c897b755E1331);
         baseUri = 'https://bafybeibaultu6wpwrq7jj2w2qh7hbi2evj2cyff4ao3co4z5eq6o5vk35e.ipfs.nftstorage.link/';
     }
     

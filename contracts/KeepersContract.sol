@@ -8,12 +8,15 @@ import "erc721a/contracts/extensions/ERC721AQueryable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract KeepersContract is ERC721AQueryable, Ownable {
+    using SafeMath for uint256;
+
     bytes32 public merkleRoot;
-    uint256 public usdcFee = 920000000 wei;
-    uint256 public maxMintQuantity = 5;
-    uint256 public maxSupply = 200;
+    uint256 public usdcFee;
+    uint256 public maxMintQuantity;
+    uint256 public maxSupply;
     address public usdcTokenAddress;
     address public paymentRecepient;
     string private baseUri;
@@ -21,6 +24,9 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
+        usdcFee = 920000000 wei; // 920 USDC
+        maxMintQuantity = 5;
+        maxSupply = 200;
         paymentRecepient = address(0xaB1d84559E9D9eBcf6De4FA93E0c897b755E1331);
         baseUri = 'https://bafybeibaultu6wpwrq7jj2w2qh7hbi2evj2cyff4ao3co4z5eq6o5vk35e.ipfs.nftstorage.link/';
     }
@@ -72,6 +78,8 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     }
 
     function setMaxSupply(uint256 _maxSupply) external onlyOwner {
+        require(_maxSupply >= totalSupply(), "Invalid max supply");
+
         maxSupply = _maxSupply;
     }
 

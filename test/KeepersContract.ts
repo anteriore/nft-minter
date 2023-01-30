@@ -176,7 +176,7 @@ describe("Minting", function () {
       const paymentAddress = await nftContract.paymentRecepient()
       const paymentAddressBalance = await tokenContract.balanceOf(paymentAddress)
 
-      expect(paymentAddressBalance).to.equal(usdcFee.mul(quantityToMint))
+      expect(paymentAddressBalance).to.equal(920000000 * quantityToMint)
     })
   })
 })

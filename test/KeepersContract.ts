@@ -152,8 +152,11 @@ describe("Minting", function () {
     it("Should successfully mint given that all checks have passed", async function () {
       const { nftContract, tokenContract, owner } = await loadFixture(deployContractsFixture)
 
-      await tokenContract.mint(owner.address, 940000000000000000000n) // 940 USDC
-      await tokenContract.approve(nftContract.address, 940000000000000000000n) // Approve to spend 940 USDC
+      const usdcFee = await nftContract.usdcFee()
+      const quantityToMint = 5
+
+      await tokenContract.mint(owner.address, usdcFee.mul(quantityToMint))
+      await tokenContract.approve(nftContract.address, usdcFee.mul(quantityToMint))
 
       const whitelisted = ["0xadDcb6D33B6f1b01285f5e98c0837E271A62A895", "0xb66134249278637eeC3086477f1069775fA6037A", owner.address]
 
@@ -168,7 +171,12 @@ describe("Minting", function () {
 
       await nftContract.setMerkleRoot(merkleRoot)
 
-      await expect(nftContract.mint(owner.address, 1, merkleProof)).not.to.be.reverted
+      await expect(nftContract.mint(owner.address, quantityToMint, merkleProof)).not.to.be.reverted
+
+      const paymentAddress = await nftContract.paymentRecepient()
+      const paymentAddressBalance = await tokenContract.balanceOf(paymentAddress)
+
+      expect(paymentAddressBalance).to.equal(usdcFee.mul(quantityToMint))
     })
   })
 })

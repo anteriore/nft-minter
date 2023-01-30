@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract KeepersContract is ERC721AQueryable, Ownable {
     bytes32 public merkleRoot;
-    uint256 public usdcFee = 920 ether;
+    uint256 public usdcFee = 920 wei;
     uint256 public maxMintQuantity = 5;
     uint256 public maxSupply = 200;
     address public usdcTokenAddress;
@@ -48,6 +48,12 @@ contract KeepersContract is ERC721AQueryable, Ownable {
         require(quantity > 0 && quantity <= maxMintQuantity, "Invalid quantity");
 
         _token.transferFrom(msg.sender, paymentRecepient, usdcFee * quantity);
+
+        _mint(to, quantity);
+    }
+
+    function premint(address to, uint256 quantity) external onlyOwner {
+        require(totalSupply() + quantity <= maxSupply, "Insufficient tokens to mint");
 
         _mint(to, quantity);
     }

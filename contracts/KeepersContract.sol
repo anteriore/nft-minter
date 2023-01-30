@@ -40,7 +40,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     function mint(address to, uint256 quantity, bytes32[] calldata merkleProof) external {
         IERC20 _token = IERC20(usdcTokenAddress);
 
-        require(MerkleProof.verify(merkleProof, merkleRoot, toBytes32(msg.sender)) == true || isPublic, "Invalid merkle proof");
+        require(isPublic || MerkleProof.verify(merkleProof, merkleRoot, toBytes32(msg.sender)) == true, "Invalid merkle proof");
         require(totalSupply() + quantity <= maxSupply, "Insufficient tokens to mint");
         require(
             _token.balanceOf(msg.sender) >= usdcFee,

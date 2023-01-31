@@ -21,6 +21,7 @@ contract KeepersContract is ERC721AQueryable, Ownable {
     address public paymentRecepient;
     string private baseUri;
     bool private isPublic = false;
+    address[] private whitelist;
 
     constructor(string memory _name, string memory _symbol, address _usdcTokenAddress) ERC721A(_name, _symbol) {
         usdcTokenAddress = _usdcTokenAddress;
@@ -39,14 +40,10 @@ contract KeepersContract is ERC721AQueryable, Ownable {
         return baseUri;
     }
 
-    function toBytes32(address addr) pure internal returns (bytes32) {
-        return bytes32(uint256(uint160(addr)));
-    }
-
-    function mint(address to, uint256 quantity, bytes32[] calldata merkleProof) external {
+    function mint(address to, uint256 quantity) external {
         IERC20 _token = IERC20(usdcTokenAddress);
 
-        require(isPublic || MerkleProof.verify(merkleProof, merkleRoot, toBytes32(msg.sender)) == true, "Invalid merkle proof");
+        require(isPublic || isAddressWhitelisted(msg.sender) == true, "Invalid address");
         require(totalSupply() + quantity <= maxSupply, "Insufficient tokens to mint");
         require(
             _token.balanceOf(msg.sender) >= usdcFee,
@@ -63,6 +60,16 @@ contract KeepersContract is ERC721AQueryable, Ownable {
         require(totalSupply() + quantity <= maxSupply, "Insufficient tokens to mint");
 
         _mint(to, quantity);
+    }
+
+    function isAddressWhitelisted(address _addr) public view returns (bool) {
+        for (uint256 i = 0; i < whitelist.length; i++) {
+            if (whitelist[i] == _addr) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     function setMerkleRoot(bytes32 _merkleRoot) external onlyOwner {
@@ -97,5 +104,9 @@ contract KeepersContract is ERC721AQueryable, Ownable {
 
     function setIsPublic(bool _isPublic) external onlyOwner {
         isPublic = _isPublic;
+    }
+
+    function setWhitelist(address[] calldata _whitelist) external onlyOwner {
+        whitelist = _whitelist;
     }
 }

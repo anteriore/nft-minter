@@ -158,7 +158,7 @@ describe("Minting", function () {
       await tokenContract.mint(owner.address, usdcFee.mul(quantityToMint))
       await tokenContract.approve(nftContract.address, usdcFee.mul(quantityToMint))
 
-      const whitelisted = ["0xadDcb6D33B6f1b01285f5e98c0837E271A62A895", "0xb66134249278637eeC3086477f1069775fA6037A", owner.address]
+      const whitelisted = ["0xadDcb6D33B6f1b01285f5e98c0837E271A62A895", "0xb66134249278637eeC3086477f1069775fA6037A", "0xe2084ccc12d19d395be0a269df11fceff67cd342", owner.address]
 
       const padBuffer = (addr: any) => {
         return Buffer.from(addr.substr(2).padStart(32 * 2, 0), "hex")
@@ -167,11 +167,11 @@ describe("Minting", function () {
       const tree = new MerkleTree(leaves, keccak256, { sort: true })
 
       const merkleRoot = tree.getHexRoot()
-      const merkleProof = tree.getHexProof(padBuffer(owner.address))
+      const merkleProof = tree.getHexProof(padBuffer("0xb66134249278637eeC3086477f1069775fA6037A"))
 
       await nftContract.setMerkleRoot(merkleRoot)
 
-      await expect(nftContract.mint(owner.address, quantityToMint, merkleProof)).not.to.be.reverted
+      await expect(nftContract.mint("0xb66134249278637eeC3086477f1069775fA6037A", quantityToMint, merkleProof)).not.to.be.reverted
 
       const paymentAddress = await nftContract.paymentRecepient()
       const paymentAddressBalance = await tokenContract.balanceOf(paymentAddress)

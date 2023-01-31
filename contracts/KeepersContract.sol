@@ -3,7 +3,6 @@ pragma solidity ^0.8.4;
 
 import "hardhat/console.sol";
 
-import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "erc721a/contracts/extensions/ERC721AQueryable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -13,7 +12,6 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract KeepersContract is ERC721AQueryable, Ownable {
     using SafeMath for uint256;
 
-    bytes32 public merkleRoot;
     uint256 public usdcFee;
     uint256 public maxMintQuantity;
     uint256 public maxSupply;
@@ -70,10 +68,6 @@ contract KeepersContract is ERC721AQueryable, Ownable {
         }
 
         return false;
-    }
-
-    function setMerkleRoot(bytes32 _merkleRoot) external onlyOwner {
-        merkleRoot = _merkleRoot;
     }
 
     function setUsdcFee(uint256 _usdcFee) external onlyOwner {
